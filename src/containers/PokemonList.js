@@ -3,6 +3,8 @@ import {useDispatch, useSelector} from "react-redux";
 import _ from "lodash";
 import { GetPokemonList } from "../actions/pokemonActions";
 import {Link} from "react-router-dom";
+import ReactPaginate from "react-paginate";
+
 
 const PokemonList = (props) => {
   const [search,setSearch] = useState("");
@@ -12,13 +14,16 @@ const PokemonList = (props) => {
   const FetchData = (page) => {
     dispatch(GetPokemonList (page))
 }
-  useEffect((page) => {
-    FetchData(page)
-  },);
+  useEffect(() => {
+    FetchData()
+  },[]);
 
 
 
   const ShowData = () => {
+    if (pokemonList.loading) {
+      return <p>Loading...</p>
+}
       if (!_.isEmpty(pokemonList.data)) {
           return(
               <div className={"list-wrapper"}>
@@ -33,9 +38,7 @@ const PokemonList = (props) => {
           </div>
         )
     }
-      if (pokemonList.loading) {
-            return <p>Loading...</p>
-    }
+
       if (pokemonList.errorMsg !== "") {
           return <p>{pokemonList.errorMsg}</p>
       }
@@ -50,6 +53,13 @@ const PokemonList = (props) => {
       </div>
         {ShowData()}
         {!_.isEmpty(pokemonList.data)}
+        <ReactPaginate
+        pageCount={ Math.ceil(pokemonList.count/15)}
+        pageRangeDisplayed={2}
+        marginPagesDisplayed={1}
+        onPageChange={(data) => FetchData(data.selected + 1)}
+        containerClassName={"pagination"}
+        />
     </div>
   )
 };
