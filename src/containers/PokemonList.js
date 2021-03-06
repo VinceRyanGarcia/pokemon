@@ -1,19 +1,22 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import _ from "lodash";
 import { GetPokemonList } from "../actions/pokemonActions";
 import {Link} from "react-router-dom";
 
-const PokemonList = () => {
+const PokemonList = (props) => {
+  const [search,setSearch] = useState("");
   const dispatch = useDispatch();
   const pokemonList = useSelector(state => state.PokemonList);
-  React.useEffect(() => {
-    FetchData(1)
-  },[]);
-
+  
   const FetchData = (page) => {
-      dispatch(GetPokemonList (page))
-  }
+    dispatch(GetPokemonList (page))
+}
+  useEffect((page) => {
+    FetchData(page)
+  },);
+
+
 
   const ShowData = () => {
       if (!_.isEmpty(pokemonList.data)) {
@@ -40,7 +43,13 @@ const PokemonList = () => {
       };
      return(
     <div>
+      <div className={"search-wrapper"}>
+        <p>Search:</p>
+        <input type="text" onChange={e => setSearch(e.target.value)}/>
+        <button onClick={() => props.history.push(`/pokemon/${search}`)}>Search</button>
+      </div>
         {ShowData()}
+        {!_.isEmpty(pokemonList.data)}
     </div>
   )
 };

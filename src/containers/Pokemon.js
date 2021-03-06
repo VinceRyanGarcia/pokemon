@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {GetPokemon} from "../actions/pokemonActions"
 import _ from "lodash";
@@ -7,9 +7,10 @@ const Pokemon = (props) => {
     const pokemonName = props.match.params.pokemon;
     const dispatch = useDispatch();
     const pokemonState = useSelector(state => state.Pokemon);
-    React.useEffect(() =>{
+    
+    useEffect(() =>{
         dispatch(GetPokemon(pokemonName))
-    },[]);
+    },[dispatch, pokemonName]);
 
     const ShowData = () => {
         if (!_.isEmpty(pokemonState.data[pokemonName])) {
