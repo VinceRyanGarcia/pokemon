@@ -30,7 +30,7 @@ const Pokemon = (props) => {
                             return <p> {el.stat.name} {el.base_stat}</p>
                         })}
                     </div>
-                    <div>
+                    <div className="item">
                         <h1>Abilities</h1>
                         {pokeData.abilities.map( el => {
                             return <p> {el.ability.name}</p>
